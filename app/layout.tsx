@@ -41,9 +41,6 @@ export default function RootLayout({
           <Web3Provider>
             <NuqsAdapter>{children}</NuqsAdapter>
           </Web3Provider>
-          <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-            <Footer />
-          </footer>
         </ThemeProvider>
         {/* </Providers> */}
       </body>

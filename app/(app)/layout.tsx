@@ -9,6 +9,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/Sidebar";
+import Footer from "@/components/layout/Footer";
 
 const AppLayout = async ({ children }: { children: React.ReactNode }) => {
   const cookieStore = await cookies();
@@ -24,7 +25,13 @@ const AppLayout = async ({ children }: { children: React.ReactNode }) => {
 
       <main className=" flex-1">
         <Header />
-        <div className="min-h-screen  container mx-auto py-4">{children}</div>
+        <div className="min-h-screen  container mx-auto py-4">
+          {children}
+
+          <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
+            <Footer />
+          </footer>
+        </div>
       </main>
     </SidebarProvider>
   );

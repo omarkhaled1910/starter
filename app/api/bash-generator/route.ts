@@ -90,6 +90,7 @@ export async function POST(req: NextRequest) {
                 message: "Bitmap generated successfully",
                 outputFile: outputFileName,
                 stdout: stdout.trim(),
+                url,
               },
               { status: 200 }
             )
