@@ -2,19 +2,24 @@ import React from "react";
 import FieldInfo from "./FieldInfo";
 import { Input } from "../ui/input";
 import { FormSelectField } from "./FormSelectField";
+import { FormMultiSelect } from "./FormMultiSelect";
 
 type FieldValidator = {
-  onChange?: (params: { value: string }) => string | undefined;
-  onChangeAsync?: (params: { value: string }) => Promise<string | undefined>;
+  onChange?: (params: { value: any }) => string | undefined;
+  onChangeAsync?: (params: { value: any }) => Promise<string | undefined>;
   onChangeAsyncDebounceMs?: number;
 };
 
 type FieldConfig = {
   name: string;
   label: string;
-  type?: "text" | "email" | "password" | "number" | "select";
+  type?: "text" | "email" | "password" | "number" | "select" | "multi";
   placeholder?: string;
-  options?: string[];
+  options?: {
+    label: string;
+    value: string;
+    icon?: React.ComponentType<{ className?: string }>;
+  }[];
   validators: FieldValidator;
 };
 
@@ -41,7 +46,15 @@ const FormField = ({ fieldConfig, form }: FormFieldProps) => {
         <div className="grid gap-2">
           <label htmlFor={field.name}>{label}:</label>
 
-          {type === "select" && options ? (
+          {type === "multi" && Array.isArray(options) ? (
+            <FormMultiSelect
+              defaultValue={field.state.value || []}
+              onValueChange={field.handleChange}
+              placeholder={placeholder}
+              options={options}
+              className="w-full"
+            />
+          ) : type === "select" && options ? (
             <FormSelectField
               value={field.state.value}
               onValueChange={field.handleChange}

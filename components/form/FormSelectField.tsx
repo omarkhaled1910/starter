@@ -12,7 +12,11 @@ interface FormSelectFieldProps {
   onValueChange: (value: string) => void;
   onBlur: () => void;
   placeholder?: string;
-  options: string[];
+  options: {
+    label: string;
+    value: string;
+    icon?: React.ComponentType<{ className?: string }>;
+  }[];
   id?: string;
   name?: string;
   error?: boolean;
@@ -39,8 +43,8 @@ export const FormSelectField = ({
       </SelectTrigger>
       <SelectContent>
         {options.map((option) => (
-          <SelectItem key={option} value={option}>
-            {option}
+          <SelectItem key={option.value} value={option.value}>
+            {option.label}
           </SelectItem>
         ))}
       </SelectContent>

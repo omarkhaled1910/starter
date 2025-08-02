@@ -23,11 +23,11 @@ import { useRouter } from "next/navigation";
 import { ModeToggle } from "../ui/mode-toggle";
 import Link from "next/link";
 import { COOKIE_TOKEN, COOKIE_USER } from "@/constants";
+import { SidebarTrigger } from "../ui/sidebar";
 const Header = () => {
   const router = useRouter();
   const [isScrolled, setIsScrolled] = useState(false);
   const { resetUser, user } = useUserStore();
-  console.log(user);
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
@@ -55,6 +55,8 @@ const Header = () => {
       <div className="container mx-auto flex items-center justify-between">
         {/* Logo */}
         <div className="text-xl font-bold">
+          <SidebarTrigger />
+
           <Link href="/pet-dashboard">Pet Store</Link>
         </div>
 

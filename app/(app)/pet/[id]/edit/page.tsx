@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import { useParams, useRouter } from "next/navigation";
 import { deletePet, getPetById, updatePetPost } from "@/app/actions/pets";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import FileUploader from "@/components/custom/FileUploader";
 
 const EditPetPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -24,6 +25,11 @@ const EditPetPage = () => {
     defaultValues: {
       name: data?.name,
       status: data?.status,
+      photoUrls: data?.photoUrls || [],
+      tags:
+        data?.tags?.map((tag) => {
+          return { label: tag.name, value: tag.id };
+        }) || [],
     },
     onSubmit: async ({ value }) => {
       console.log(value);
@@ -31,6 +37,7 @@ const EditPetPage = () => {
         name: value.name || "",
         status: value.status || "sold",
         petid: Number(id),
+        photoUrls: value.photoUrls,
       });
       console.log(res, "res");
       if (res) {
@@ -64,10 +71,38 @@ const EditPetPage = () => {
     label: "Status",
     type: "select" as const,
     placeholder: "Select status",
-    options: ["available", "pending", "sold"],
+    options: [
+      { label: "Available", value: "available" },
+      { label: "Pending", value: "pending" },
+      { label: "Sold", value: "sold" },
+    ],
     validators: {
       onChange: ({ value }: { value: string }) =>
         !value ? "Status is required" : undefined,
+    },
+  };
+  const tagsField = {
+    name: "tags",
+    label: "Tags",
+    type: "multi" as const,
+    placeholder: "Select tags",
+    options: [
+      { label: "Tag 1", value: "tag1" },
+      { label: "Tag 2", value: "tag2" },
+      { label: "Tag 3", value: "tag3" },
+      { label: "Tag 4", value: "tag4" },
+      { label: "Tag 5", value: "tag5" },
+      { label: "Tag 6", value: "tag6" },
+      { label: "Tag 7", value: "tag7" },
+      { label: "Tag 8", value: "tag8" },
+      { label: "Tag 9", value: "tag9" },
+      { label: "Tag 10", value: "tag10" },
+    ],
+    validators: {
+      onChange: ({ value }: { value: any[] }) =>
+        !value || value.length === 0
+          ? "At least one tag is required"
+          : undefined,
     },
   };
 
@@ -108,7 +143,18 @@ const EditPetPage = () => {
       </header>
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         {isLoading && <div>Loading...</div>}
-        {error && <div>Error loading pet</div>}
+        {error && !isLoading && !data && (
+          <div>
+            Error loading pet {error.message}{" "}
+            <Button
+              onClick={() => {
+                queryClient.invalidateQueries({ queryKey: ["pet", id] });
+              }}
+            >
+              Retry
+            </Button>
+          </div>
+        )}
         {data && (
           <form
             onSubmit={(e) => {
@@ -127,6 +173,26 @@ const EditPetPage = () => {
             <div>
               <div className="mt-2">
                 <FormField fieldConfig={statusField} form={form} />
+              </div>
+            </div>
+
+            <div>
+              <div className="mt-2">
+                <FormField fieldConfig={tagsField} form={form} />
+              </div>
+            </div>
+
+            <div>
+              <div className="mt-2">
+                <FileUploader
+                  onUploadFinalize={(successes: string[]) => {
+                    console.log("uploaded", successes);
+                    form.setFieldValue(
+                      "photoUrls",
+                      successes.map((success) => `supa-${success}`)
+                    );
+                  }}
+                />
               </div>
             </div>
 
