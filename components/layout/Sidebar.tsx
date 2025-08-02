@@ -20,13 +20,13 @@ const items = [
     icon: Home,
   },
   {
-    title: "Inbox",
-    url: "#",
+    title: "NFT Marketplace",
+    url: "/nft-marketplace",
     icon: Inbox,
   },
   {
-    title: "Calendar",
-    url: "#",
+    title: "NFT Details",
+    url: "/nft-details",
     icon: Calendar,
   },
   {
@@ -37,6 +37,11 @@ const items = [
   {
     title: "Settings",
     url: "#",
+    icon: Settings,
+  },
+  {
+    title: "NFT Generator",
+    url: "/nft-generator",
     icon: Settings,
   },
 ];

@@ -5,6 +5,10 @@ import { Providers } from "./providers";
 import { Toaster } from "react-hot-toast";
 import { ThemeProvider } from "next-themes";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { Web3Provider } from "./providers/Web3Provider";
+import Footer from "@/components/layout/Footer";
+import "@rainbow-me/rainbowkit/styles.css";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,12 +36,16 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Toaster position="top-right" reverseOrder={false} />{" "}
-        <Providers>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        {/* <Providers> */}
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <Web3Provider>
             <NuqsAdapter>{children}</NuqsAdapter>
-            <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center"></footer>
-          </ThemeProvider>
-        </Providers>
+          </Web3Provider>
+          <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
+            <Footer />
+          </footer>
+        </ThemeProvider>
+        {/* </Providers> */}
       </body>
     </html>
   );

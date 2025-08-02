@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   useInfiniteQuery,
   useMutation,
@@ -67,6 +67,13 @@ const TrendingTokens = () => {
   if (error) {
     toast.error("Failed to load tokens");
     return <div className="text-red-500 p-4">Error loading data</div>;
+  }
+  if (isFetching && data?.pages.length === 0) {
+    return (
+      <div className="space-y-4 flex justify-center items-center h-full">
+        <Skeleton />
+      </div>
+    );
   }
 
   return (
@@ -150,8 +157,8 @@ const TrendingTokens = () => {
         )}
       </div>
       {isFetching && (
-        <div className="space-y-4">
-          <PropagateLoader />
+        <div className="space-y-4 flex justify-center items-center h-full">
+          <PropagateLoader className="[&>span]:!bg-primary" />
         </div>
       )}
 
