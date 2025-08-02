@@ -1,7 +1,7 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "@tanstack/react-form";
-import { login } from "@/app/actions/user";
+import { login, loginWithWallet } from "@/app/actions/user";
 import FormField from "@/components/form/FormField";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -12,10 +12,13 @@ import { COOKIE_USER } from "@/constants";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useAccount } from "wagmi";
 
 const LoginPage = () => {
   const router = useRouter();
   const { setUser } = useUserStore();
+  const { address } = useAccount();
+  console.log(address, "address");
   const form = useForm({
     defaultValues: {
       email: "admin@1.com",
@@ -37,6 +40,12 @@ const LoginPage = () => {
     },
   });
 
+  useEffect(() => {
+    if (address) {
+      loginWithWallet(address);
+      router.push("/pet-dashboard");
+    }
+  }, [address]);
   const emailField = {
     name: "email",
     label: "Email Address",

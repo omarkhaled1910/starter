@@ -2,7 +2,7 @@ import React from "react";
 import Header from "@/components/layout/Header";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { COOKIE_USER } from "@/constants";
+import { COOKIE_TOKEN } from "@/constants";
 import {
   SIDEBAR_COOKIE_NAME,
   SidebarProvider,
@@ -13,9 +13,9 @@ import Footer from "@/components/layout/Footer";
 
 const AppLayout = async ({ children }: { children: React.ReactNode }) => {
   const cookieStore = await cookies();
-  const user = cookieStore.get(COOKIE_USER);
+  const user = cookieStore.get(COOKIE_TOKEN);
   // const defaultOpen = cookieStore?.get(SIDEBAR_COOKIE_NAME)?.value === "true";
-  console.log(user);
+  console.log(user, "user");
   if (!user) {
     redirect("/login");
   }
@@ -28,9 +28,7 @@ const AppLayout = async ({ children }: { children: React.ReactNode }) => {
         <div className="min-h-screen  container mx-auto py-4">
           {children}
 
-          <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-            <Footer />
-          </footer>
+          <Footer />
         </div>
       </main>
     </SidebarProvider>

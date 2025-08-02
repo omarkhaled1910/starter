@@ -2,8 +2,8 @@ import { FC } from "react";
 
 const Footer: FC = () => {
   return (
-    <footer className="py-16 border-t border-gray-200 dark:border-gray-800">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <footer className="p-16 border-t border-gray-200 dark:border-gray-800 ">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <div>
           <div className="flex items-center space-x-2 mb-6">
             <div className="w-8 h-8 rounded-lg bg-purple-500"></div>
@@ -58,20 +58,22 @@ const Footer: FC = () => {
             )}
           </ul>
         </div>
+      </div>
+      <br />
+      <br />
 
-        <div>
-          <h3 className="font-bold text-lg mb-6">Newsletter</h3>
-          <p className="opacity-80 mb-4">Stay updated with our latest news</p>
-          <div className="flex">
-            <input
-              type="email"
-              placeholder="Your email"
-              className="px-4 py-2 bg-white dark:bg-gray-900 border border-r-0 rounded-l-lg flex-grow"
-            />
-            <button className="px-4 py-2 bg-purple-500 text-white rounded-r-lg hover:bg-purple-600 transition-colors">
-              Subscribe
-            </button>
-          </div>
+      <div>
+        <h3 className="font-bold text-lg mb-6">Newsletter</h3>
+        <p className="opacity-80 mb-4">Stay updated with our latest news</p>
+        <div className="flex">
+          <input
+            type="email"
+            placeholder="Your email"
+            className="px-4 py-2 bg-white dark:bg-gray-900 border border-r-0 rounded-l-lg flex-grow"
+          />
+          <button className="px-4 py-2 bg-purple-500 text-white rounded-r-lg hover:bg-purple-600 transition-colors">
+            Subscribe
+          </button>
         </div>
       </div>
 

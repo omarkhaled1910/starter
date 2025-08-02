@@ -24,6 +24,8 @@ import { ModeToggle } from "../ui/mode-toggle";
 import Link from "next/link";
 import { COOKIE_TOKEN, COOKIE_USER } from "@/constants";
 import { SidebarTrigger } from "../ui/sidebar";
+import { useAccount } from "wagmi";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 const Header = () => {
   const router = useRouter();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -43,6 +45,14 @@ const Header = () => {
     resetUser();
     router.push("/login");
   };
+  const { address } = useAccount();
+
+  useEffect(() => {
+    if (!address) {
+      logout();
+      router.push("/login");
+    }
+  }, [address]);
 
   return (
     <header
@@ -82,28 +92,33 @@ const Header = () => {
         {/* User Avatar with Dropdown */}
         <div className="flex flex-row items-center justify-center gap-2">
           <ModeToggle />
-          <DropdownMenu>
-            <DropdownMenuTrigger className="focus:outline-none">
-              <Avatar className="border-2 border-white">
-                <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel>{user?.name}</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuItem>Billing</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={handleLogout}
-                className="text-red-500 focus:text-red-500"
-              >
-                Logout
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+
+          {address ? (
+            <ConnectButton />
+          ) : (
+            <DropdownMenu>
+              <DropdownMenuTrigger className="focus:outline-none">
+                <Avatar className="border-2 border-white">
+                  <AvatarImage src="https://github.com/shadcn.png" />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>{user?.name}</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>Profile</DropdownMenuItem>
+                <DropdownMenuItem>Settings</DropdownMenuItem>
+                <DropdownMenuItem>Billing</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={handleLogout}
+                  className="text-red-500 focus:text-red-500"
+                >
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
       </div>
     </header>

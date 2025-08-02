@@ -36,3 +36,13 @@ export const logout = async () => {
     message: "Logout successful",
   };
 };
+export const loginWithWallet = async (address: string) => {
+  const cookieStore = await cookies();
+  cookieStore.set(COOKIE_TOKEN, address || "");
+};
+
+export const getUser = async () => {
+  const cookieStore = await cookies();
+  const user = cookieStore.get(COOKIE_USER);
+  return user;
+};
