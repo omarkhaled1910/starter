@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { useUserStore } from "@/store/user";
-import { COOKIE_USER } from "@/constants";
+import { COOKIE_TOKEN, COOKIE_USER } from "@/constants";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -42,7 +42,9 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (address) {
-      loginWithWallet(address);
+      // loginWithWallet(address);
+      document.cookie = `${COOKIE_TOKEN}=${address}; path=/; max-age=${19999999999}`;
+
       router.push("/pet-dashboard");
     }
   }, [address]);

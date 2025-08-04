@@ -15,8 +15,9 @@ const AppLayout = async ({ children }: { children: React.ReactNode }) => {
   const cookieStore = await cookies();
   const user = cookieStore.get(COOKIE_TOKEN);
   // const defaultOpen = cookieStore?.get(SIDEBAR_COOKIE_NAME)?.value === "true";
-  console.log(user, "user");
   if (!user) {
+    console.log(user, "NO USER FOUND !!!!");
+    console.log(cookieStore.getAll()); // see all cookies available to the server
     redirect("/login");
   }
   return (

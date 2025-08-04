@@ -24,7 +24,7 @@ import { ModeToggle } from "../ui/mode-toggle";
 import Link from "next/link";
 import { COOKIE_TOKEN, COOKIE_USER } from "@/constants";
 import { SidebarTrigger } from "../ui/sidebar";
-import { useAccount } from "wagmi";
+import { useAccount, useAccountEffect } from "wagmi";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 const Header = () => {
   const router = useRouter();
@@ -47,12 +47,16 @@ const Header = () => {
   };
   const { address } = useAccount();
 
-  useEffect(() => {
-    if (!address) {
-      logout();
+  useAccountEffect({
+    onConnect(data) {
+      console.log("Connected!", data);
+    },
+    async onDisconnect() {
+      console.log("Disconnected!");
+      await handleLogout();
       router.push("/login");
-    }
-  }, [address]);
+    },
+  });
 
   return (
     <header

@@ -36,13 +36,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Toaster position="top-right" reverseOrder={false} />{" "}
-        {/* <Providers> */}
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Web3Provider>
             <NuqsAdapter>{children}</NuqsAdapter>
           </Web3Provider>
         </ThemeProvider>
-        {/* </Providers> */}
       </body>
     </html>
   );
