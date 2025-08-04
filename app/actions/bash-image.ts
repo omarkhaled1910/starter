@@ -16,6 +16,7 @@ export interface GenerateBitmapResponse {
   stdout?: string;
   error?: string;
   code?: number;
+  bmpBuffer?: Buffer;
 }
 
 export interface ApiError {
@@ -66,7 +67,14 @@ export async function generateSpriteBitmap(
 
     // Validate sprite data if provided
     if (request.spriteData) {
-      if (request.spriteData.length !== request.height) {
+      console.log(
+        request.spriteData,
+        request.spriteData.length,
+        request.height,
+        request.spriteData.length.toString() !== request.height.toString()
+      );
+
+      if (request.spriteData.length.toString() !== request.height.toString()) {
         throw new Error(
           `Sprite data length (${request.spriteData.length}) must match height (${request.height})`
         );
@@ -74,7 +82,7 @@ export async function generateSpriteBitmap(
 
       for (let i = 0; i < request.spriteData.length; i++) {
         const row = request.spriteData[i];
-        if (row.length !== request.width) {
+        if (row.length.toString() !== request.width.toString()) {
           throw new Error(
             `Row ${i} length (${row.length}) must match width (${request.width})`
           );

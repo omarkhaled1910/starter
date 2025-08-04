@@ -3,6 +3,7 @@ import { spawn } from "child_process";
 import { writeFileSync, unlinkSync, existsSync } from "fs";
 import path from "path";
 import { uploadBMPToSupabase } from "@/app/actions/uploader";
+import fs from "fs";
 
 interface RequestBody {
   palette: Record<string, string>; // { 'A': '#FF0000', 'B': '#00FF00' }
@@ -77,12 +78,12 @@ export async function POST(req: NextRequest) {
         if (existsSync(paletteFilePath)) {
           unlinkSync(paletteFilePath);
         }
-
+        let url = "",
+          bmpBuffer;
         if (code === 0) {
-          console.log("Bash script executed successfully:", stdout);
-          const bmpBuffer = Buffer.concat(chunks);
-
-          const url = await uploadBMPToSupabase(bmpBuffer, outputFileName);
+          // const bmpBuffer = Buffer.concat(chunks);
+          bmpBuffer = fs.readFileSync(outputFileName);
+          url = (await uploadBMPToSupabase(bmpBuffer, outputFileName)) || "";
           console.log({ url });
           resolve(
             NextResponse.json(
@@ -91,6 +92,7 @@ export async function POST(req: NextRequest) {
                 outputFile: outputFileName,
                 stdout: stdout.trim(),
                 url,
+                bmpBuffer,
               },
               { status: 200 }
             )

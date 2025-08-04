@@ -17,78 +17,169 @@ import {
   generateCheckerboardSprite,
   generateGradientSprite,
   generateSpriteBitmap,
+  PaletteMap,
 } from "@/app/actions/bash-image";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { ArrowBigLeft } from "lucide-react";
+import FormField from "@/components/form/FormField";
+import { useForm, useStore } from "@tanstack/react-form";
+import CustomPaletteBuilder from "@/components/custom/CustomPaletteBuilder";
 
 export default function NFTGenerator() {
   const router = useRouter();
-  const [width, setWidth] = useState(16);
-  const [height, setHeight] = useState(16);
-  const [patternType, setPatternType] = useState("checkerboard");
-  const [char1, setChar1] = useState("A");
-  const [char2, setChar2] = useState("B");
-  const [gradientChars, setGradientChars] = useState("A,B,C,D,E");
-  const [customSprite, setCustomSprite] = useState("");
+
   const [result, setResult] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const [palette, setPalette] = useState<PaletteMap | null>(null);
+  const form = useForm({
+    defaultValues: {
+      patternType: "checkerboard",
+      width: 16,
+      height: 16,
+      char1: "A",
+      char2: "B",
+      gradientChars: "A,B,C,D,E",
+      customSprite: "",
+    },
+    onSubmit: async ({ value }) => {
+      console.log(value);
+      const {
+        patternType,
+        width,
+        height,
+        char1,
+        char2,
+        gradientChars,
+        customSprite,
+      } = value;
 
-  const handleGenerate = async () => {
-    setError(null);
-    setResult(null);
+      startTransition(async () => {
+        try {
+          // const palette = await createSimplePalette();
+          let spriteData: string[] | undefined;
 
-    startTransition(async () => {
-      try {
-        const palette = await createSimplePalette();
-        let spriteData: string[] | undefined;
+          switch (patternType) {
+            case "checkerboard":
+              spriteData = await generateCheckerboardSprite(
+                width,
+                height,
+                char1,
+                char2
+              );
+              break;
+            case "gradient":
+              spriteData = await generateGradientSprite(
+                width,
+                height,
+                gradientChars.split(",").map((c) => c.trim())
+              );
+              break;
+            case "custom":
+              spriteData = customSprite.trim().split("\n").filter(Boolean);
+              break;
+            default:
+              spriteData = undefined;
+          }
 
-        switch (patternType) {
-          case "checkerboard":
-            spriteData = await generateCheckerboardSprite(
-              width,
-              height,
-              char1,
-              char2
-            );
-            break;
-          case "gradient":
-            spriteData = await generateGradientSprite(
-              width,
-              height,
-              gradientChars.split(",").map((c) => c.trim())
-            );
-            break;
-          case "custom":
-            spriteData = customSprite.trim().split("\n").filter(Boolean);
-            break;
-          default:
-            spriteData = undefined;
+          const response = await generateSpriteBitmap({
+            palette: palette || {},
+            width,
+            height,
+            spriteData,
+          });
+          console.log({ response }, "client");
+          if (response.error) {
+            throw new Error(response.error);
+          }
+
+          setResult(response);
+          toast.success("NFT generated successfully!");
+        } catch (err) {
+          console.log(err, "err");
+          const errorMessage =
+            err instanceof Error ? err.message : "Failed to generate NFT";
+          setError(errorMessage);
+          toast.error(errorMessage);
         }
+      });
+    },
+  });
 
-        const response = await generateSpriteBitmap({
-          palette,
-          width,
-          height,
-          spriteData,
-        });
-        console.log({ response }, "client");
-        if (response.error) {
-          throw new Error(response.error);
-        }
-
-        setResult(response);
-        toast.success("NFT generated successfully!");
-      } catch (err) {
-        console.log(err, "err");
-        const errorMessage =
-          err instanceof Error ? err.message : "Failed to generate NFT";
-        setError(errorMessage);
-        toast.error(errorMessage);
-      }
-    });
+  const widthField = {
+    name: "width",
+    label: "Width",
+    type: "text" as const,
+    placeholder: "Enter your width",
+    validators: {
+      onChange: ({ value }: { value: string }) =>
+        !value ? "Name is required" : undefined,
+    },
   };
+
+  const heightField = {
+    name: "height",
+    label: "Height",
+    type: "text" as const,
+    placeholder: "Enter your height",
+
+    validators: {
+      onChange: ({ value }: { value: string }) =>
+        !value ? "Height is required" : undefined,
+    },
+  };
+
+  const char1Field = {
+    name: "char1",
+    label: "Char 1",
+    type: "text" as const,
+    placeholder: "Enter your char 1",
+  };
+
+  const char2Field = {
+    name: "char2",
+    label: "Char 2",
+    type: "text" as const,
+    placeholder: "Enter your char 2",
+  };
+
+  const patternTypeField = {
+    name: "patternType",
+    label: "Pattern Type",
+    type: "select" as const,
+    placeholder: "Select pattern type",
+    options: [
+      { label: "Checkerboard", value: "checkerboard" },
+      { label: "Gradient", value: "gradient" },
+      { label: "Custom", value: "custom" },
+      { label: "Default", value: "default" },
+    ],
+    validators: {
+      onChange: ({ value }: { value: string }) =>
+        !value ? "Pattern type is required" : undefined,
+    },
+  };
+
+  const gradientCharsField = {
+    name: "gradientChars",
+    label: "Gradient Characters",
+    type: "text" as const,
+    placeholder: "Enter your gradient characters",
+  };
+
+  const customSpriteField = {
+    name: "customSprite",
+    label: "Custom Sprite",
+    type: "text" as const,
+    placeholder: "Enter your custom sprite",
+  };
+  const formPatternType = useStore(
+    form.store,
+    (state) => state.values.patternType
+  );
+
+  console.log(formPatternType, "patternType");
 
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -106,105 +197,81 @@ export default function NFTGenerator() {
         <div className="border rounded-lg p-6 bg-card">
           <h2 className="text-xl font-semibold mb-4">Configuration</h2>
 
-          <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="width">Width</Label>
-                <Input
-                  id="width"
-                  type="number"
-                  value={width}
-                  onChange={(e) => setWidth(Number(e.target.value))}
-                  min={1}
-                  max={128}
-                />
-              </div>
-              <div>
-                <Label htmlFor="height">Height</Label>
-                <Input
-                  id="height"
-                  type="number"
-                  value={height}
-                  onChange={(e) => setHeight(Number(e.target.value))}
-                  min={1}
-                  max={128}
-                />
-              </div>
-            </div>
-
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              form.handleSubmit();
+            }}
+            className="space-y-6"
+          >
             <div>
-              <Label>Pattern Type</Label>
-              <Select value={patternType} onValueChange={setPatternType}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select pattern" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="checkerboard">Checkerboard</SelectItem>
-                  <SelectItem value="gradient">Gradient</SelectItem>
-                  <SelectItem value="custom">Custom</SelectItem>
-                  <SelectItem value="default">
-                    Default (Server-generated)
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {patternType === "checkerboard" && (
               <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="char1">Character 1</Label>
-                  <Input
-                    id="char1"
-                    value={char1}
-                    onChange={(e) => setChar1(e.target.value)}
-                    maxLength={1}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="char2">Character 2</Label>
-                  <Input
-                    id="char2"
-                    value={char2}
-                    onChange={(e) => setChar2(e.target.value)}
-                    maxLength={1}
-                  />
-                </div>
+                <FormField fieldConfig={widthField} form={form} />
+                <FormField fieldConfig={heightField} form={form} />
               </div>
-            )}
+              <br />
 
-            {patternType === "gradient" && (
-              <div>
-                <Label htmlFor="gradientChars">Gradient Characters</Label>
-                <Input
-                  id="gradientChars"
-                  value={gradientChars}
-                  onChange={(e) => setGradientChars(e.target.value)}
-                  placeholder="Comma separated (e.g., A,B,C,D,E)"
+              <div className="mt-2">
+                <FormField fieldConfig={patternTypeField} form={form} />
+              </div>
+              <br />
+
+              {formPatternType === "checkerboard" && (
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField fieldConfig={char1Field} form={form} />
+                  <FormField fieldConfig={char2Field} form={form} />
+                </div>
+              )}
+
+              {formPatternType === "gradient" && (
+                <FormField fieldConfig={gradientCharsField} form={form} />
+              )}
+
+              {formPatternType === "custom" && (
+                <FormField fieldConfig={customSpriteField} form={form} />
+              )}
+            </div>
+            <CustomPaletteBuilder onSubmit={(e) => setPalette(e)} />
+
+            {/* 
+            <div>
+              <div className="mt-2">
+                <FormField fieldConfig={tagsField} form={form} />
+              </div>
+            </div> */}
+
+            {/* <div>
+              <div className="mt-2">
+                <FileUploader
+                  onUploadFinalize={(successes: string[]) => {
+                    console.log("uploaded", successes);
+                    form.setFieldValue(
+                      "photoUrls",
+                      successes.map((success) => `supa-${success}`)
+                    );
+                  }}
                 />
               </div>
-            )}
+            </div> */}
 
-            {patternType === "custom" && (
-              <div>
-                <Label htmlFor="customSprite">Sprite Data</Label>
-                <Textarea
-                  id="customSprite"
-                  value={customSprite}
-                  onChange={(e) => setCustomSprite(e.target.value)}
-                  rows={5}
-                  placeholder={`Enter sprite data (one row per line)\nExample for 2x2:\nAB\nBA`}
-                />
-              </div>
-            )}
-
-            <Button
-              className="w-full mt-4"
-              onClick={handleGenerate}
-              disabled={isPending}
-            >
-              {isPending ? "Generating..." : "Generate NFT"}
-            </Button>
-          </div>
+            <div className="flex justify-center w-fill">
+              <form.Subscribe
+                selector={(state) => [state.canSubmit, state.isSubmitting]}
+                children={([canSubmit, isSubmitting]) => (
+                  <Button
+                    className="w-full"
+                    type="submit"
+                    disabled={!canSubmit}
+                  >
+                    {isSubmitting || isPending
+                      ? "Generating..."
+                      : "Generate NFT"}
+                  </Button>
+                )}
+              />
+            </div>
+          </form>
         </div>
 
         <div className="border rounded-lg p-6 bg-card">

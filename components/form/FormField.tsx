@@ -20,7 +20,7 @@ type FieldConfig = {
     value: string;
     icon?: React.ComponentType<{ className?: string }>;
   }[];
-  validators: FieldValidator;
+  validators?: FieldValidator;
 };
 
 type FormFieldProps = {
