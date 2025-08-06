@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 
-export async function uploadBMPToSupabase(
+export async function uploadBinaryToSupabase(
   fileBuffer: Buffer,
   fileName: string
 ): Promise<string | null> {

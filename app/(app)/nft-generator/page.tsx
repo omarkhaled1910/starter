@@ -3,6 +3,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Bash from "./Bash";
 import Art from "./Art";
+import Art3D from "./3DArt";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ArrowBigLeft } from "lucide-react";
@@ -21,15 +22,19 @@ export default function NFTGenerator() {
         <div className="flex gap-2"></div>
       </header>
       <Tabs defaultValue="bash" className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="bash">Bash</TabsTrigger>
           <TabsTrigger value="art">Art</TabsTrigger>
+          <TabsTrigger value="art-3d">3D Art</TabsTrigger>
         </TabsList>
         <TabsContent value="bash" className="mt-6">
           <Bash />
         </TabsContent>
         <TabsContent value="art" className="mt-6">
           <Art />
+        </TabsContent>
+        <TabsContent value="art-3d" className="mt-6">
+          <Art3D />
         </TabsContent>
       </Tabs>
     </div>

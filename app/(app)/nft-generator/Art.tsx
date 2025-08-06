@@ -79,11 +79,14 @@ const Creative = () => {
             textColor: value.textColor,
             gradientStart: value.gradientStart,
             gradientEnd: value.gradientEnd,
-            imageType: "text",
+            imageType: value.imageType as any,
             width: value.width,
             height: value.height,
             backgroundColor: value.backgroundColor,
             foregroundColor: value.foregroundColor,
+            noiseLevel: value.noiseLevel,
+            borderRadius: value.borderRadius,
+            rotation: value.rotation,
           });
 
           console.log(data, "client");

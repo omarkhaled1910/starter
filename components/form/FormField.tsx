@@ -3,6 +3,7 @@ import FieldInfo from "./FieldInfo";
 import { Input } from "../ui/input";
 import { FormSelectField } from "./FormSelectField";
 import { FormMultiSelect } from "./FormMultiSelect";
+import { Slider } from "../ui/slider";
 
 type FieldValidator = {
   onChange?: (params: { value: any }) => string | undefined;
@@ -20,7 +21,8 @@ type FieldConfig = {
     | "number"
     | "select"
     | "multi"
-    | "color";
+    | "color"
+    | "slider";
   placeholder?: string;
   options?: {
     label: string;
@@ -53,7 +55,16 @@ const FormField = ({ fieldConfig, form }: FormFieldProps) => {
         <div className="grid gap-2">
           <label htmlFor={field.name}>{label}:</label>
 
-          {type === "multi" && Array.isArray(options) ? (
+          {type === "slider" ? (
+            <Slider
+              min={0.1}
+              max={3}
+              step={0.1}
+              value={[field.state.value]}
+              onValueChange={(value) => field.handleChange(value[0])}
+              className="w-full"
+            />
+          ) : type === "multi" && Array.isArray(options) ? (
             <FormMultiSelect
               defaultValue={field.state.value || []}
               onValueChange={field.handleChange}

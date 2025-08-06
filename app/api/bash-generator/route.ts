@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { spawn } from "child_process";
 import { writeFileSync, unlinkSync, existsSync } from "fs";
 import path from "path";
-import { uploadBMPToSupabase } from "@/app/actions/uploader";
+import { uploadBinaryToSupabase } from "@/app/actions/uploader";
 import fs from "fs";
 
 interface RequestBody {
@@ -83,7 +83,7 @@ export async function POST(req: NextRequest) {
         if (code === 0) {
           // const bmpBuffer = Buffer.concat(chunks);
           bmpBuffer = fs.readFileSync(outputFileName);
-          url = (await uploadBMPToSupabase(bmpBuffer, outputFileName)) || "";
+          url = (await uploadBinaryToSupabase(bmpBuffer, outputFileName)) || "";
           console.log({ url });
           resolve(
             NextResponse.json(

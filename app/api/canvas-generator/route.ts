@@ -1,7 +1,7 @@
 export const runtime = "nodejs";
 import { NextRequest, NextResponse } from "next/server";
 import { createCanvas } from "@napi-rs/canvas";
-import { uploadBMPToSupabase } from "@/app/actions/uploader";
+import { uploadBinaryToSupabase } from "@/app/actions/uploader";
 import type {
   CanvasRenderingContext2D,
   GlobalCompositeOperation,
@@ -14,7 +14,7 @@ import { writeImage } from "@/lib/serverUtils";
 // import { Delaunay } from 'd3-delaunay';
 // import chroma from 'chroma-js';
 
-interface CreativeImageParams {
+export interface CreativeImageParams {
   imageType:
     | "abstract"
     | "geometric"
@@ -149,12 +149,24 @@ export async function POST(req: NextRequest) {
     // fs.writeFileSync(filePath, buffer);
     writeImage(fileName, buffer);
     // Upload to Supabase
-    // const url = await uploadBMPToSupabase(buffer, fileName);
+    // const url = await uploadBinaryToSupabase(buffer, fileName);
 
     // if (!url) {
     //   throw new Error("Failed to upload image");
     // }
-
+    console.log("fileName", {
+      message: "Creative NFT generated successfully",
+      url: "",
+      fileName,
+      parameters: body,
+      seed,
+      metadata: {
+        type: body.imageType,
+        dimensions: `${body.width}x${body.height}`,
+        complexity: body.complexity,
+        generatedAt: new Date().toISOString(),
+      },
+    });
     return NextResponse.json({
       message: "Creative NFT generated successfully",
       url: "",
@@ -857,10 +869,11 @@ function applyBorderRadius(
 ) {
   // Apply border radius by masking
   const { width, height, borderRadius } = params;
-
+  if (!Number(borderRadius)) return;
+  console.log("borderRadius", borderRadius, typeof borderRadius);
   ctx.globalCompositeOperation = "destination-in";
   ctx.beginPath();
-  ctx.roundRect(0, 0, width, height, borderRadius);
+  ctx.roundRect(0, 0, width, height, Number(borderRadius));
   ctx.fill();
   ctx.globalCompositeOperation = "source-over";
 }

@@ -1,30 +1,7 @@
 import { apiFetch } from "@/apiFetch";
 import path from "path";
 import fs from "fs";
-
-export interface GenerateCanvasImageRequest {
-  imageType:
-    | "abstract"
-    | "geometric"
-    | "gradient"
-    | "text"
-    | "noise"
-    | "mandala"
-    | "fractal"
-    | "particle";
-  width: number;
-  height: number;
-  backgroundColor: string;
-  foregroundColor: string;
-  shapes: number;
-  complexity: number;
-  pattern: string;
-  text: string;
-  fontSize: number;
-  textColor: string;
-  gradientStart: string;
-  gradientEnd: string;
-}
+import { CreativeImageParams } from "@/app/api/canvas-generator/route";
 
 export interface GenerateCanvasImageResponse {
   message: string;
@@ -47,7 +24,7 @@ export interface GenerateCanvasImageResponse {
 }
 
 export async function generateCanvasImage(
-  request: GenerateCanvasImageRequest
+  request: CreativeImageParams
 ): Promise<GenerateCanvasImageResponse> {
   try {
     const response = await apiFetch<GenerateCanvasImageResponse>(
