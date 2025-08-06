@@ -13,7 +13,14 @@ type FieldValidator = {
 type FieldConfig = {
   name: string;
   label: string;
-  type?: "text" | "email" | "password" | "number" | "select" | "multi";
+  type?:
+    | "text"
+    | "email"
+    | "password"
+    | "number"
+    | "select"
+    | "multi"
+    | "color";
   placeholder?: string;
   options?: {
     label: string;

@@ -10,6 +10,11 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+
+  experimental: {
+    // ppr: "incremental",
+  },
+  serverExternalPackages: ["@napi-rs/canvas"],
 };
 
 export default nextConfig;

@@ -1,5 +1,6 @@
 "use server";
-const BASE_URL = process.env.API_BASE_URL || "https://petstore.swagger.io/v2";
+const BASE_URL =
+  process.env.NEXT_PUBLIC_BASE_URL || "https://petstore.swagger.io/v2";
 
 type RequestOptions = {
   method?: "GET" | "POST" | "PUT" | "DELETE";
