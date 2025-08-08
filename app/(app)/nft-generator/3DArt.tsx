@@ -1,56 +1,66 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, {
+  forwardRef,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 import { Button } from "@/components/ui/button";
 import { useForm, useStore } from "@tanstack/react-form";
 import FormField from "@/components/form/FormField";
+import { GLTFExporter } from "three-stdlib";
+import { upload3D } from "@/app/actions/upload-3d";
 
 const shapes = ["cube", "sphere", "torus"];
 
-function MeshComponent({
-  shape,
-  color,
-  size,
-  rotation,
-}: {
+type MeshComponentProps = {
   shape: string;
   color: string;
   size: number;
   rotation: { x: number; y: number; z: number };
-}) {
-  const meshRef = useRef<THREE.Mesh>(null!);
+};
 
-  useFrame(() => {
-    if (meshRef.current) {
-      meshRef.current.rotation.x = rotation.x;
-      meshRef.current.rotation.y = rotation.y;
-      meshRef.current.rotation.z = rotation.z;
-    }
-  });
+const MeshComponent = forwardRef<THREE.Mesh, MeshComponentProps>(
+  ({ shape, color, size, rotation }, ref) => {
+    const meshRef = useRef<THREE.Mesh>(null!);
 
-  const geometry = React.useMemo(() => {
-    switch (shape) {
-      case "sphere":
-        return new THREE.SphereGeometry(1, 32, 32);
-      case "torus":
-        return new THREE.TorusGeometry(1, 0.4, 16, 100);
-      case "cube":
-      default:
-        return new THREE.BoxGeometry(1.5, 1.5, 1.5);
-    }
-  }, [shape]);
+    useFrame(() => {
+      if (meshRef.current) {
+        meshRef.current.rotation.x = rotation.x;
+        meshRef.current.rotation.y = rotation.y;
+        meshRef.current.rotation.z = rotation.z;
+      }
+    });
 
-  return (
-    <mesh ref={meshRef} geometry={geometry} scale={[size, size, size]}>
-      <meshStandardMaterial color={color} />
-    </mesh>
-  );
-}
+    useImperativeHandle(ref, () => meshRef.current);
+
+    const geometry = React.useMemo(() => {
+      switch (shape) {
+        case "sphere":
+          return new THREE.SphereGeometry(1, 32, 32);
+        case "torus":
+          return new THREE.TorusGeometry(1, 0.4, 16, 100);
+        case "cube":
+        default:
+          return new THREE.BoxGeometry(1.5, 1.5, 1.5);
+      }
+    }, [shape]);
+
+    return (
+      <mesh ref={meshRef} geometry={geometry} scale={[size, size, size]}>
+        <meshStandardMaterial color={color} />
+      </mesh>
+    );
+  }
+);
 
 export default function Art3D() {
+  const meshRef = useRef<THREE.Mesh>(null!);
+  const [isUploading, setIsUploading] = useState(false);
   const form = useForm({
     defaultValues: {
       shape: "cube",
@@ -61,7 +71,33 @@ export default function Art3D() {
       rotationZ: 0,
     },
     onSubmit: async ({ value }) => {
-      console.log("Form submitted with values:", value);
+      const exporter = new GLTFExporter();
+      console.log("Form submitted with values:", value, exporter);
+      setIsUploading(true);
+      exporter.parse(
+        meshRef.current,
+        async (result) => {
+          const blob =
+            result instanceof ArrayBuffer
+              ? new Blob([result], { type: "model/gltf-binary" })
+              : new Blob([JSON.stringify(result)], {
+                  type: "application/json",
+                });
+
+          const file = new File([blob], "model.glb", {
+            type: "model/gltf-binary",
+          });
+          console.log(file, "file");
+          const res = await upload3D(file);
+          console.log(res, "after export  ad upload");
+          setIsUploading(false);
+        },
+        (error) => {
+          console.error(error);
+          setIsUploading(false);
+        },
+        { binary: true }
+      );
     },
   });
 
@@ -155,7 +191,9 @@ export default function Art3D() {
                     type="submit"
                     disabled={!canSubmit}
                   >
-                    {isSubmitting ? "Updating..." : "Update 3D Model"}
+                    {isSubmitting || isUploading
+                      ? "Updating..."
+                      : "Update 3D Model"}
                   </Button>
                 )}
               />
@@ -172,6 +210,7 @@ export default function Art3D() {
               <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
               <pointLight position={[-10, -10, -10]} />
               <MeshComponent
+                ref={meshRef}
                 shape={formValues.shape}
                 color={formValues.color}
                 size={formValues.size}

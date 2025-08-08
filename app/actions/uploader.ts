@@ -6,12 +6,6 @@ export async function uploadBinaryToSupabase(
 ): Promise<string | null> {
   const supabase = await createClient();
 
-  //   const { data, error } = await supabase.storage
-  //     .from("images") // Your bucket name
-  //     .upload(fileName, fileBuffer, {
-  //       contentType: "image/bmp",
-  //       upsert: true,
-  //     });
   console.log(fileName, "fileName");
   let url = "";
   const bucketName = "erc";

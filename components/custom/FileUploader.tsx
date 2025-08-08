@@ -9,13 +9,15 @@ import { useSupabaseUpload } from "@/hooks/use-supabase-upload";
 
 const FileUploader = ({
   onUploadFinalize,
+  allowedMimeTypes,
 }: {
   onUploadFinalize: (successes: string[]) => void;
+  allowedMimeTypes?: string[];
 }) => {
   const props = useSupabaseUpload({
     bucketName: "erc",
     path: "erc",
-    allowedMimeTypes: ["image/*"],
+    allowedMimeTypes: ["image/*", ...(allowedMimeTypes || [])],
     maxFiles: 2,
     maxFileSize: 1000 * 1000 * 10, // 10MB,
   });
