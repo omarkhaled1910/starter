@@ -25,7 +25,7 @@ import Link from "next/link";
 import { COOKIE_TOKEN, COOKIE_USER } from "@/constants";
 import { SidebarTrigger } from "../ui/sidebar";
 import { useAccount, useAccountEffect } from "wagmi";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import ConnectButton from "../custom/ConnectButton";
 const Header = () => {
   const router = useRouter();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -48,7 +48,7 @@ const Header = () => {
   const { address } = useAccount();
 
   useAccountEffect({
-    onConnect(data) {
+    async onConnect(data) {
       console.log("Connected!", data);
     },
     async onDisconnect() {
@@ -96,8 +96,8 @@ const Header = () => {
         {/* User Avatar with Dropdown */}
         <div className="flex flex-row items-center justify-center gap-2">
           <ModeToggle />
-
-          {address ? (
+          {/* <ConnectButton /> */}
+          {true ? (
             <ConnectButton />
           ) : (
             <DropdownMenu>

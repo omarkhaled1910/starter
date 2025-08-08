@@ -15,16 +15,22 @@ const PetsWrapper = ({
   status: "available" | "pending" | "sold";
 }) => {
   const { setClientStoredPet } = useSelectedPetStore();
-  const { data, isLoading, error } = useQuery({
+  const {
+    data = [],
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["pets", status],
     queryFn: () => getPetsByStatus(status),
   });
 
   const filteredPets = useMemo(
     () =>
-      data?.filter((pet) =>
-        pet?.name?.toLowerCase()?.includes(searchTerm?.toLowerCase())
-      ),
+      Array.isArray(data)
+        ? data?.filter((pet) =>
+            pet?.name?.toLowerCase()?.includes(searchTerm?.toLowerCase())
+          )
+        : [],
     [data, searchTerm]
   );
   return (

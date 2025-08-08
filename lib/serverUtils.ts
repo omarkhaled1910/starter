@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { COOKIE_TOKEN } from "@/constants";
 import path from "path";
 import fs from "fs";
+import jwt from "jsonwebtoken";
 
 export const validateCokkieToken = async () => {
   const cookieStore = await cookies();
@@ -27,7 +28,6 @@ export const writeImage = (fileName: string, buffer: Buffer) => {
   }
 };
 
-
 export async function streamToBuffer(stream: ReadableStream): Promise<Buffer> {
   const reader = stream.getReader();
   const chunks: Uint8Array[] = [];
@@ -41,3 +41,15 @@ export async function streamToBuffer(stream: ReadableStream): Promise<Buffer> {
 
   return Buffer.concat(chunks);
 }
+
+const jwtSecret = process.env.SUPABASE_JWT_SECRET || "";
+
+export function generateJwtToken(walletAddress: string) {
+  const payload = {
+    sub: walletAddress.toLowerCase(),
+    role: "authenticated",
+    iat: Math.floor(Date.now() / 1000),
+    exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24, // expires in 24h
+  };
+  return jwt.sign(payload, jwtSecret);
+} 

@@ -12,7 +12,7 @@ import { COOKIE_TOKEN, COOKIE_USER } from "@/constants";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useAccount } from "wagmi";
+import { useAccount, useAccountEffect } from "wagmi";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -42,12 +42,21 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (address) {
-      // loginWithWallet(address);
-      document.cookie = `${COOKIE_TOKEN}=${address}; path=/; max-age=${19999999999}`;
-
-      router.push("/pet-dashboard");
+      loginWithWallet(address);
+      // document.cookie = `${COOKIE_TOKEN}=${address}; path=/; max-age=${19999999999}`;
     }
   }, [address]);
+
+  useAccountEffect({
+    async onConnect(data) {
+      console.log("Connected!", data);
+      if (address) {
+        loginWithWallet(address);
+        router.push("/");
+      }
+    },
+  });
+
   const emailField = {
     name: "email",
     label: "Email Address",

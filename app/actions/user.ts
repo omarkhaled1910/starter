@@ -1,6 +1,8 @@
 "use server";
 import { cookies } from "next/headers";
 import { COOKIE_TOKEN, COOKIE_USER } from "@/constants";
+import { generateJwtToken } from "@/lib/serverUtils";
+import { createClient } from "@/lib/supabase/server";
 const users = [
   {
     name: "Admin",
@@ -37,6 +39,35 @@ export const logout = async () => {
   };
 };
 export const loginWithWallet = async (address: string) => {
+  // const isValidAddress = await validateAddress(address);
+  const token = generateJwtToken(address);
+  const supabase = await createClient();
+  const { data: userData, error: selectError } = await supabase
+    .from("users")
+    .select("*")
+    .eq("wallet_address", address);
+
+  if (!userData) {
+    // write the new user in teh table
+    const { data, error } = await supabase.from("users").insert({
+      wallet_address: address,
+      name: address,
+      last_logged_in: new Date().toISOString(),
+    });
+    if (error) {
+      console.log(error);
+    }
+  }
+  console.log(userData);
+  const { data, error } = await supabase.auth.setSession({
+    access_token: token,
+    refresh_token: token,
+  });
+  console.log(data, error);
+  // auth.setSession({
+  //   access_token: token,
+  //   refresh_token: token,
+  // });
   const cookieStore = await cookies();
   cookieStore.set(COOKIE_TOKEN, address || "");
 };
