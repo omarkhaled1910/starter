@@ -30,8 +30,8 @@ const items = [
     icon: Calendar,
   },
   {
-    title: "Search",
-    url: "#",
+    title: "Liked NFTs",
+    url: "/liked-nfts",
     icon: Search,
   },
   {

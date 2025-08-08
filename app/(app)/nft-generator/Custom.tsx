@@ -2,9 +2,11 @@ import { Button } from "@/components/ui/button";
 import FileUploader from "@/components/custom/FileUploader";
 import FormField from "@/components/form/FormField";
 import { useForm } from "@tanstack/react-form";
-import React from "react";
+import React, { useState } from "react";
+import MintButton from "./MintButton";
 
 const Custom = () => {
+  const [result, setResult] = useState<{ url: string } | null>(null);
   const form = useForm({
     defaultValues: {
       shape: "cube",
@@ -36,7 +38,8 @@ const Custom = () => {
     placeholder: "Enter a name",
   };
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <div className="max-w-6xl mx-auto p-6 pt-0">
+      <MintButton url={result?.url || ""} />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="border rounded-lg p-6 bg-card">
           <h2 className="text-xl font-semibold mb-4">

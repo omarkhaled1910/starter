@@ -14,6 +14,7 @@ import { useForm, useStore } from "@tanstack/react-form";
 import FormField from "@/components/form/FormField";
 import { GLTFExporter } from "three-stdlib";
 import { upload3D } from "@/app/actions/upload-3d";
+import MintButton from "./MintButton";
 
 const shapes = ["cube", "sphere", "torus"];
 
@@ -61,6 +62,7 @@ const MeshComponent = forwardRef<THREE.Mesh, MeshComponentProps>(
 export default function Art3D() {
   const meshRef = useRef<THREE.Mesh>(null!);
   const [isUploading, setIsUploading] = useState(false);
+  const [result, setResult] = useState<{ url: string } | null>(null);
   const form = useForm({
     defaultValues: {
       shape: "cube",
@@ -91,6 +93,7 @@ export default function Art3D() {
           const res = await upload3D(file);
           console.log(res, "after export  ad upload");
           setIsUploading(false);
+          setResult({ url: res.url });
         },
         (error) => {
           console.error(error);
@@ -158,7 +161,8 @@ export default function Art3D() {
   const formValues = useStore(form.store, (state) => state.values);
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <div className="max-w-6xl mx-auto p-6 pt-0">
+      <MintButton url={result?.url || ""} />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="border rounded-lg p-6 bg-card">
           <h2 className="text-xl font-semibold mb-4">3D Art Configuration</h2>

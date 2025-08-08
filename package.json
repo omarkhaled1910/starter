@@ -26,6 +26,7 @@
     "@rainbow-me/rainbowkit": "^2.2.8",
     "@react-three/drei": "^10.6.1",
     "@react-three/fiber": "^9.3.0",
+    "@solana/spl-token": "^0.4.13",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.52.0",
     "@tanstack/react-form": "^1.14.1",

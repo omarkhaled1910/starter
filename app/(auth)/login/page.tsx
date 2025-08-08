@@ -40,22 +40,22 @@ const LoginPage = () => {
     },
   });
 
-  useEffect(() => {
-    if (address) {
-      loginWithWallet(address);
-      // document.cookie = `${COOKIE_TOKEN}=${address}; path=/; max-age=${19999999999}`;
-    }
-  }, [address]);
+  // useEffect(() => {
+  //   if (address) {
+  //     loginWithWallet(address);
+  //     // document.cookie = `${COOKIE_TOKEN}=${address}; path=/; max-age=${19999999999}`;
+  //   }
+  // }, [address]);
 
-  useAccountEffect({
-    async onConnect(data) {
-      console.log("Connected!", data);
-      if (address) {
-        loginWithWallet(address);
-        router.push("/");
-      }
-    },
-  });
+  // useAccountEffect({
+  //   async onConnect(data) {
+  //     console.log("Connected!", data);
+  //     if (address) {
+  //       loginWithWallet(address);
+  //       router.push("/");
+  //     }
+  //   },
+  // });
 
   const emailField = {
     name: "email",

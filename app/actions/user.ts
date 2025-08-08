@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { COOKIE_TOKEN, COOKIE_USER } from "@/constants";
 import { generateJwtToken } from "@/lib/serverUtils";
 import { createClient } from "@/lib/supabase/server";
+import { User } from "@privy-io/react-auth";
 const users = [
   {
     name: "Admin",
@@ -38,38 +39,57 @@ export const logout = async () => {
     message: "Logout successful",
   };
 };
-export const loginWithWallet = async (address: string) => {
+export const loginWithWallet = async (
+  { id, ...privyUser }: User,
+  token: string
+) => {
   // const isValidAddress = await validateAddress(address);
-  const token = generateJwtToken(address);
+  // const token = generateJwtToken(address);
+  console.log("loginWithWallet", privyUser);
   const supabase = await createClient();
   const { data: userData, error: selectError } = await supabase
     .from("users")
     .select("*")
-    .eq("wallet_address", address);
+    .eq("user_privy_id", id);
 
-  if (!userData) {
+  if (userData?.length === 0) {
+    console.log("writing new user in the table", id, privyUser);
     // write the new user in teh table
     const { data, error } = await supabase.from("users").insert({
-      wallet_address: address,
-      name: address,
+      user_privy_id: id,
+      privy_created_at: privyUser?.createdAt?.toISOString(),
+      linked_accounts: privyUser.linkedAccounts,
+      metadata: privyUser,
+      is_guest: privyUser.isGuest,
+      has_accepted_terms: privyUser.hasAcceptedTerms,
       last_logged_in: new Date().toISOString(),
     });
+
+    console.log("data after writing to ssupabase", data);
+    if (error) {
+      console.log(error);
+    }
+  } else {
+    const { data, error } = await supabase
+      .from("users")
+      .update({ last_logged_in: new Date().toISOString() })
+      .eq("user_privy_id", id);
     if (error) {
       console.log(error);
     }
   }
   console.log(userData);
-  const { data, error } = await supabase.auth.setSession({
-    access_token: token,
-    refresh_token: token,
-  });
-  console.log(data, error);
+  // const { data, error } = await supabase.auth.setSession({
+  //   access_token: token,
+  //   refresh_token: token,
+  // });
+  // console.log(data, error);
   // auth.setSession({
   //   access_token: token,
   //   refresh_token: token,
   // });
   const cookieStore = await cookies();
-  cookieStore.set(COOKIE_TOKEN, address || "");
+  cookieStore.set(COOKIE_TOKEN, token || "");
 };
 
 export const getUser = async () => {

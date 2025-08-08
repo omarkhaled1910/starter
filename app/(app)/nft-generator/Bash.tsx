@@ -15,6 +15,7 @@ import { ArrowBigLeft } from "lucide-react";
 import FormField from "@/components/form/FormField";
 import { useForm, useStore } from "@tanstack/react-form";
 import CustomPaletteBuilder from "@/components/custom/CustomPaletteBuilder";
+import MintButton from "./MintButton";
 
 const Bash = () => {
   const router = useRouter();
@@ -172,7 +173,8 @@ const Bash = () => {
   console.log(formPatternType, "patternType");
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="max-w-6xl mx-auto p-6 pt-0">
+      <MintButton url={result?.url || ""} />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="border rounded-lg p-6 bg-card">
           <h2 className="text-xl font-semibold mb-4">Configuration</h2>
