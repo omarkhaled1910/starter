@@ -1,4 +1,12 @@
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
+import {
+  Calendar,
+  Coins,
+  Home,
+  Inbox,
+  Search,
+  Settings,
+  Wallet2,
+} from "lucide-react";
 
 import {
   Sidebar,
@@ -15,9 +23,14 @@ import Link from "next/link";
 // Menu items.
 const items = [
   {
+    title: "NFT Dashboard",
+    url: "/nft-dashboard",
+    icon: Home,
+  },
+  {
     title: "Tokens",
     url: "/tokens",
-    icon: Home,
+    icon: Coins,
   },
   {
     title: "NFT Marketplace",
@@ -34,15 +47,16 @@ const items = [
     url: "/liked-nfts",
     icon: Search,
   },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
-  },
+
   {
     title: "NFT Generator",
     url: "/nft-generator",
     icon: Settings,
+  },
+  {
+    title: "Deployer",
+    url: "/deployer",
+    icon: Wallet2,
   },
 ];
 

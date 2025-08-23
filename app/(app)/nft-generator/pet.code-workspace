@@ -1,0 +1,13 @@
+{
+  "folders": [
+	{
+		"name": "pet",
+		"path": "../../.."
+	},
+	{
+		"name": "bash-bmp-main",
+		"path": "../../../../../Downloads/bash-bmp-main"
+	}
+],
+  "settings": {}
+}

@@ -4,6 +4,7 @@ import React from "react";
 import { usePrivy } from "@privy-io/react-auth";
 import { useQuery } from "@tanstack/react-query";
 import { getNFTsByUser } from "@/app/actions/nfts";
+import NFTCard from "@/components/custom/NFTCard";
 
 const NftLiked = () => {
   const { user } = usePrivy();
@@ -14,7 +15,7 @@ const NftLiked = () => {
   return (
     <div>
       {nfts?.map((nft) => (
-        <>{nft}</>
+        <NFTCard nft={nft} key={nft.id} />
       ))}
     </div>
   );

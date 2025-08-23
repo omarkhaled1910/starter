@@ -1,6 +1,7 @@
 import React from "react";
 import FieldInfo from "./FieldInfo";
 import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
 import { FormSelectField } from "./FormSelectField";
 import { FormMultiSelect } from "./FormMultiSelect";
 import { Slider } from "../ui/slider";
@@ -22,7 +23,8 @@ type FieldConfig = {
     | "select"
     | "multi"
     | "color"
-    | "slider";
+    | "slider"
+    | "textarea";
   placeholder?: string;
   options?: {
     label: string;
@@ -82,6 +84,18 @@ const FormField = ({ fieldConfig, form }: FormFieldProps) => {
               id={field.name}
               name={field.name}
               error={field.state.meta.errors.length > 0}
+            />
+          ) : type === "textarea" ? (
+            <Textarea
+              id={field.name}
+              name={field.name}
+              placeholder={placeholder}
+              value={field.state.value}
+              onBlur={field.handleBlur}
+              onChange={(e) => field.handleChange(e.target.value)}
+              className={
+                field.state.meta.errors.length > 0 ? "border-destructive" : ""
+              }
             />
           ) : (
             <Input

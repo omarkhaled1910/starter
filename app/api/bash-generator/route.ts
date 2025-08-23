@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
     const bashScriptPath = path.resolve(process.cwd(), "sprite-to-bmp.sh");
     const newBashPath = "/opt/homebrew/bin/bash"; // Or wherever `brew install bash` installed it
 
-    return new Promise((resolve) => {
+    const response = await new Promise<NextResponse>((resolve) => {
       const bashProcess = spawn(newBashPath || "bash", [
         bashScriptPath,
         "-p",
@@ -131,6 +131,7 @@ export async function POST(req: NextRequest) {
         );
       });
     });
+    return response;
   } catch (error) {
     console.error("API Error:", error);
     return NextResponse.json(

@@ -9,10 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@biconomy/account": "^4.5.7",
+    "@biconomy/bundler": "^3.1.4",
+    "@biconomy/common": "^3.1.4",
+    "@biconomy/paymaster": "^3.1.4",
     "@napi-rs/canvas": "^0.1.76",
-    "@privy-io/react-auth": "^2.21.2",
+    "@privy-io/react-auth": "^2.21.3",
     "@radix-ui/react-avatar": "^1.1.10",
-    "@radix-ui/react-dialog": "^1.1.14",
+    "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-dropdown-menu": "^2.1.15",
     "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-navigation-menu": "^1.2.13",
@@ -34,6 +38,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
+    "framer-motion": "12.23.12",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.525.0",
     "next": "15.4.1",
@@ -46,6 +51,7 @@
     "react-spinners": "^0.17.0",
     "tailwind-merge": "^3.3.1",
     "three": "^0.179.1",
+    "vaul": "^1.1.2",
     "viem": "^2.33.2",
     "wagmi": "^2.16.1",
     "zustand": "^5.0.6"

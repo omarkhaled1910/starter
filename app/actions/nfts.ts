@@ -1,5 +1,7 @@
+"use server";
 import { createClient } from "@/lib/supabase/server";
 
+export type NFTType = "BASH" | "ART" | "3D" | "CUSTOM";
 export interface NFT {
   id?: string;
   user_privy_id: string;
@@ -13,6 +15,10 @@ export interface NFT {
   is_minted?: boolean;
   acquired_at?: Date;
   last_transferred_at?: Date;
+  type?: NFTType;
+  owner_address?: string;
+  minted_at?: Date;
+  minted_by?: string;
 }
 
 export async function createNFT(nft: NFT) {
@@ -88,4 +94,84 @@ export async function deleteNFT(id: string) {
   }
 
   return true;
+}
+
+export async function getAllNFTsCount() {
+  const supabase = await createClient();
+  const { count, error } = await supabase
+    .from("nfts")
+    .select("*", { count: "exact", head: true });
+
+  if (error) {
+    console.error("Error getting NFTs count:", error);
+    return 0;
+  }
+
+  return count || 0;
+}
+
+export async function getAllNFTs(
+  pageParam: number,
+  limit: number,
+  searchTerm?: string,
+  status?: string
+) {
+  try {
+    const supabase = await createClient();
+    let query = supabase
+      .from("nfts")
+      .select("*")
+      .range(pageParam, pageParam + limit - 1);
+
+    // Add filters if provided
+    if (searchTerm) {
+      query = query.ilike("name", `%${searchTerm}%`);
+    }
+
+    // if (status) {
+    //   query = query.eq("status", status);
+    // }
+
+    const { data, error } = await query;
+    console.log(data);
+
+    if (error) {
+      console.error(error);
+      return [];
+    }
+    return data;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}
+
+export async function mintNFT(nft: NFT) {
+  const supabase = await createClient();
+  if (!nft.id) {
+    const { data, error } = await supabase
+      .from("nfts")
+      .insert([{ ...nft, is_minted: true, minted_at: new Date() }])
+      .select()
+      .single();
+
+    return data;
+  }
+  const { data, error } = await supabase
+    .from("nfts")
+    .update({
+      is_minted: true,
+      blockchain: nft.blockchain,
+      owner_address: nft.owner_address,
+      minted_at: new Date(),
+      minted_by: nft.minted_by,
+      // depend on block chain
+      contract_address: "",
+    })
+    .eq("id", nft.id);
+
+  if (error) {
+    throw new Error(`Failed to mint NFT: ${error.message}`);
+  }
+  return data;
 }

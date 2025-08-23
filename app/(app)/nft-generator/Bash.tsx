@@ -174,8 +174,8 @@ const Bash = () => {
 
   return (
     <div className="max-w-6xl mx-auto p-6 pt-0">
-      <MintButton url={result?.url || ""} />
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <MintButton type="BASH" url={result?.url || ""} />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="border rounded-lg p-6 bg-card">
           <h2 className="text-xl font-semibold mb-4">Configuration</h2>
 

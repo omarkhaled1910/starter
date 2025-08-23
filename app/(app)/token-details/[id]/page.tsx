@@ -4,32 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import React from "react";
 
-interface TokenDetailsProps {
-  id: number;
-  created_at: string;
-  chainId: string;
-  tokenAddress: string;
-  name: string;
-  uniqueName: string;
-  symbol: string;
-  decimals: number;
-  logo: string;
-  usdPrice: number;
-  marketCap: number;
-  liquidityUsd: number;
-  holders: number;
-  buyTransactions: { [key: string]: number };
-  buyers: { [key: string]: number };
-  pricePercentChange: { [key: string]: number };
-  sellTransactions: { [key: string]: number };
-  sellers: { [key: string]: number };
-  totalVolume: { [key: string]: number };
-  transactions: { [key: string]: number };
-  source: string;
-  createdAt: number;
-}
-
-const TokenDetails: React.FC<TokenDetailsProps> = () => {
+const TokenDetails: React.FC = () => {
   const { id } = useParams();
 
   const { data, isLoading } = useQuery<any>({

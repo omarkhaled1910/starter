@@ -1,4 +1,6 @@
+"use client";
 import { FC } from "react";
+import { useSmartAccountStore } from "@/store/biconomyData";
 
 const Testimonials: FC = () => {
   const testimonials = [
@@ -25,6 +27,10 @@ const Testimonials: FC = () => {
     },
   ];
 
+  // const { smartAccount, smartAccountAddress } = useBiconomy(10);
+  const { smartAccount } = useSmartAccountStore();
+
+  console.log("smartAccount", smartAccount);
   return (
     <section className="py-16">
       <div className="text-center mb-16">

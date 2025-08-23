@@ -256,10 +256,10 @@ const Creative = () => {
   };
 
   const formImageType = useStore(form.store, (state) => state.values.imageType);
-
+  console.log(result, "result");
   return (
     <div className="max-w-6xl mx-auto p-6">
-      <MintButton url={result?.url || ""} />
+      <MintButton type="ART" url={result?.url || ""} />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="border rounded-lg p-6 bg-card">
           <h2 className="text-xl font-semibold mb-4">

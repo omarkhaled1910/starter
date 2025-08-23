@@ -149,14 +149,14 @@ export async function POST(req: NextRequest) {
     // fs.writeFileSync(filePath, buffer);
     writeImage(fileName, buffer);
     // Upload to Supabase
-    // const url = await uploadBinaryToSupabase(buffer, fileName);
+    const url = await uploadBinaryToSupabase(buffer, fileName);
 
     // if (!url) {
     //   throw new Error("Failed to upload image");
     // }
     console.log("fileName", {
       message: "Creative NFT generated successfully",
-      url: "",
+      url: url || "",
       fileName,
       parameters: body,
       seed,
@@ -169,7 +169,7 @@ export async function POST(req: NextRequest) {
     });
     return NextResponse.json({
       message: "Creative NFT generated successfully",
-      url: "",
+      url: url || "",
       fileName,
       parameters: body,
       seed,
