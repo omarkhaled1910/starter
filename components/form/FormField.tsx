@@ -5,9 +5,11 @@ import { Textarea } from "../ui/textarea";
 import { FormSelectField } from "./FormSelectField";
 import { FormMultiSelect } from "./FormMultiSelect";
 import { Slider } from "../ui/slider";
+import FormOtp from "./FormOtp";
+import { cn } from "@/lib/utils";
 
 type FieldValidator = {
-  onChange?: (params: { value: any }) => string | undefined;
+  onChange?: (params: { value: any; fieldApi: any }) => string | undefined;
   onChangeAsync?: (params: { value: any }) => Promise<string | undefined>;
   onChangeAsyncDebounceMs?: number;
 };
@@ -24,7 +26,8 @@ type FieldConfig = {
     | "multi"
     | "color"
     | "slider"
-    | "textarea";
+    | "textarea"
+    | "otp";
   placeholder?: string;
   options?: {
     label: string;
@@ -32,6 +35,7 @@ type FieldConfig = {
     icon?: React.ComponentType<{ className?: string }>;
   }[];
   validators?: FieldValidator;
+  className?: string;
 };
 
 type FormFieldProps = {
@@ -47,6 +51,7 @@ const FormField = ({ fieldConfig, form }: FormFieldProps) => {
     placeholder,
     options,
     validators,
+    className,
   } = fieldConfig;
 
   return (
@@ -54,7 +59,7 @@ const FormField = ({ fieldConfig, form }: FormFieldProps) => {
       name={name}
       validators={validators}
       children={(field: any) => (
-        <div className="grid gap-2">
+        <div className={cn("grid gap-2", className)}>
           <label htmlFor={field.name}>{label}:</label>
 
           {type === "slider" ? (
@@ -96,6 +101,13 @@ const FormField = ({ fieldConfig, form }: FormFieldProps) => {
               className={
                 field.state.meta.errors.length > 0 ? "border-destructive" : ""
               }
+            />
+          ) : type === "otp" ? (
+            <FormOtp
+              value={field.state.value}
+              onBlur={field.handleBlur}
+              onChange={(e) => field.handleChange(e)}
+              error={field.state.meta.errors.length > 0}
             />
           ) : (
             <Input
