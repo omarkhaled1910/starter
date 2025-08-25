@@ -47,96 +47,84 @@ const PhoneOTPVerification: React.FC<
   const t = useTranslations("HomePage");
 
   return (
-    <div className="min-h-screen bg-background flex flex-col justify-center px-4 py-12">
-      <div className="mx-auto w-full max-w-md">
-        <div className="flex justify-center mb-8">
-          <img
-            alt="Your Company"
-            src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-            className="h-10 w-auto"
-          />
-        </div>
+    <Card className="border-border bg-card">
+      <CardHeader className="text-center">
+        <CardTitle className="text-2xl font-bold text-card-foreground">
+          {t("title")}
+        </CardTitle>
+        <p className="text-sm text-muted-foreground mt-2">
+          We've sent a 6-digit verification code to{" "}
+          <span className="font-medium text-card-foreground">
+            {data.phoneNumber}
+          </span>
+        </p>
+      </CardHeader>
 
-        <Card className="border-border bg-card">
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-bold text-card-foreground">
-              {t("title")}
-            </CardTitle>
-            <p className="text-sm text-muted-foreground mt-2">
-              We've sent a 6-digit verification code to{" "}
-              <span className="font-medium text-card-foreground">
-                {data.phoneNumber}
-              </span>
+      <CardContent>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            form.handleSubmit();
+          }}
+          className="space-y-6"
+        >
+          <div>
+            <FormField fieldConfig={otpField} form={form} />
+          </div>
+
+          <div className="text-center">
+            <p className="text-sm text-muted-foreground mb-2">
+              Didn't receive the code?
             </p>
-          </CardHeader>
-
-          <CardContent>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                form.handleSubmit();
-              }}
-              className="space-y-6"
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={handleResendOTP}
+              className="text-primary hover:text-primary/80"
             >
-              <div>
-                <FormField fieldConfig={otpField} form={form} />
-              </div>
+              Resend verification code
+            </Button>
+          </div>
 
-              <div className="text-center">
-                <p className="text-sm text-muted-foreground mb-2">
-                  Didn't receive the code?
-                </p>
+          <div className="flex gap-4 w-full flex-wrap">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={prevStep}
+              className="w-full"
+            >
+              Back
+            </Button>
+            <form.Subscribe
+              selector={(state) => [state.canSubmit, state.isSubmitting]}
+              children={([canSubmit, isSubmitting]) => (
                 <Button
-                  type="button"
-                  variant="ghost"
-                  onClick={handleResendOTP}
-                  className="text-primary hover:text-primary/80"
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+                  type="submit"
+                  disabled={!canSubmit}
                 >
-                  Resend verification code
+                  {isSubmitting ? "Verifying..." : "Complete Registration"}
                 </Button>
-              </div>
+              )}
+            />
+          </div>
+        </form>
 
-              <div className="flex gap-4 w-full flex-wrap">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={prevStep}
-                  className="w-full"
-                >
-                  Back
-                </Button>
-                <form.Subscribe
-                  selector={(state) => [state.canSubmit, state.isSubmitting]}
-                  children={([canSubmit, isSubmitting]) => (
-                    <Button
-                      className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
-                      type="submit"
-                      disabled={!canSubmit}
-                    >
-                      {isSubmitting ? "Verifying..." : "Complete Registration"}
-                    </Button>
-                  )}
-                />
-              </div>
-            </form>
-
-            <div className="mt-6 text-center">
-              <p className="text-xs text-muted-foreground">
-                By completing registration, you agree to our{" "}
-                <a href="#" className="text-primary hover:text-primary/80">
-                  Terms of Service
-                </a>{" "}
-                and{" "}
-                <a href="#" className="text-primary hover:text-primary/80">
-                  Privacy Policy
-                </a>
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
+        <div className="mt-6 text-center">
+          <p className="text-xs text-muted-foreground">
+            By completing registration, you agree to our{" "}
+            <a href="#" className="text-primary hover:text-primary/80">
+              Terms of Service
+            </a>{" "}
+            and{" "}
+            <a href="#" className="text-primary hover:text-primary/80">
+              Privacy Policy
+            </a>
+          </p>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 

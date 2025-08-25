@@ -84,64 +84,52 @@ const RegistrationForm: React.FC<
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col justify-center px-4 py-12">
-      <div className="mx-auto w-full max-w-md">
-        <div className="flex justify-center mb-8">
-          <img
-            alt="Your Company"
-            src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-            className="h-10 w-auto"
-          />
-        </div>
+    <Card className="border-border bg-card">
+      <CardHeader className="text-center">
+        <CardTitle className="text-2xl font-bold text-card-foreground">
+          Create your account
+        </CardTitle>
+      </CardHeader>
 
-        <Card className="border-border bg-card">
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-bold text-card-foreground">
-              Create your account
-            </CardTitle>
-          </CardHeader>
+      <CardContent>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            form.handleSubmit();
+          }}
+          className="space-y-6"
+        >
+          <div className="grid grid-cols-2 gap-4">
+            <FormField fieldConfig={firstNameField} form={form} />
+            <FormField fieldConfig={lastNameField} form={form} />
+          </div>
 
-          <CardContent>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                form.handleSubmit();
-              }}
-              className="space-y-6"
-            >
-              <div className="grid grid-cols-2 gap-4">
-                <FormField fieldConfig={firstNameField} form={form} />
-                <FormField fieldConfig={lastNameField} form={form} />
-              </div>
+          {/* <div>
+            <FormField fieldConfig={emailField} form={form} />
+          </div>
 
-              <div>
-                <FormField fieldConfig={emailField} form={form} />
-              </div>
+          <div>
+            <FormField fieldConfig={phoneField} form={form} />
+          </div> */}
 
-              <div>
-                <FormField fieldConfig={phoneField} form={form} />
-              </div>
-
-              <div className="flex justify-center w-full">
-                <form.Subscribe
-                  selector={(state) => [state.canSubmit, state.isSubmitting]}
-                  children={([canSubmit, isSubmitting]) => (
-                    <Button
-                      className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
-                      type="submit"
-                      disabled={!canSubmit}
-                    >
-                      {isSubmitting ? "Processing..." : "Continue"}
-                    </Button>
-                  )}
-                />
-              </div>
-            </form>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
+          <div className="flex justify-center w-full">
+            <form.Subscribe
+              selector={(state) => [state.canSubmit, state.isSubmitting]}
+              children={([canSubmit, isSubmitting]) => (
+                <Button
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+                  type="submit"
+                  disabled={!canSubmit}
+                >
+                  {isSubmitting ? "Processing..." : "Continue"}
+                </Button>
+              )}
+            />
+          </div>
+        </form>
+      </CardContent>
+    </Card>
   );
 };
 

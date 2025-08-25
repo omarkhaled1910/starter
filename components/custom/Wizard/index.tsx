@@ -13,6 +13,7 @@ export const Wizard = <T, S extends string>({
   initialData = {},
   trackSteps = false,
   onStepChange,
+  sharedHeader,
   ...props
 }: WizardProps<T, S>): ReactElement => {
   const [data, setData] = useState<Partial<T>>(initialData);
@@ -110,6 +111,7 @@ export const Wizard = <T, S extends string>({
 
   return (
     <WizardProvider value={contextValue}>
+      {sharedHeader && sharedHeader(steps.indexOf(step), steps.length)}
       <CurrentStepComponent
         data={data}
         updateData={updateData}

@@ -56,71 +56,59 @@ const CreatePasswordForm: React.FC<
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col justify-center px-4 py-12">
-      <div className="mx-auto w-full max-w-md">
-        <div className="flex justify-center mb-8">
-          <img
-            alt="Your Company"
-            src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-            className="h-10 w-auto"
-          />
-        </div>
+    <Card className="border-border bg-card">
+      <CardHeader className="text-center">
+        <CardTitle className="text-2xl font-bold text-card-foreground">
+          Create a secure password
+        </CardTitle>
+        <p className="text-sm text-muted-foreground mt-2">
+          Your password should be at least 8 characters long and include
+          uppercase, lowercase, and numbers.
+        </p>
+      </CardHeader>
 
-        <Card className="border-border bg-card">
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-bold text-card-foreground">
-              Create a secure password
-            </CardTitle>
-            <p className="text-sm text-muted-foreground mt-2">
-              Your password should be at least 8 characters long and include
-              uppercase, lowercase, and numbers.
-            </p>
-          </CardHeader>
+      <CardContent>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            form.handleSubmit();
+          }}
+          className="space-y-6"
+        >
+          <div>
+            <FormField fieldConfig={passwordField} form={form} />
+          </div>
 
-          <CardContent>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                form.handleSubmit();
-              }}
-              className="space-y-6"
+          <div>
+            {/* <FormField fieldConfig={confirmPasswordField} form={form} /> */}
+          </div>
+
+          <div className="flex gap-4 w-full justify-center flex-wrap">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={prevStep}
+              className="w-full"
             >
-              <div>
-                <FormField fieldConfig={passwordField} form={form} />
-              </div>
-
-              <div>
-                <FormField fieldConfig={confirmPasswordField} form={form} />
-              </div>
-
-              <div className="flex gap-4 w-full">
+              Back
+            </Button>
+            <form.Subscribe
+              selector={(state) => [state.canSubmit, state.isSubmitting]}
+              children={([canSubmit, isSubmitting]) => (
                 <Button
-                  type="button"
-                  variant="outline"
-                  onClick={prevStep}
-                  className="w-full"
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+                  type="submit"
+                  disabled={!canSubmit}
                 >
-                  Back
+                  {isSubmitting ? "Processing..." : "Continue"}
                 </Button>
-                <form.Subscribe
-                  selector={(state) => [state.canSubmit, state.isSubmitting]}
-                  children={([canSubmit, isSubmitting]) => (
-                    <Button
-                      className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
-                      type="submit"
-                      disabled={!canSubmit}
-                    >
-                      {isSubmitting ? "Processing..." : "Continue"}
-                    </Button>
-                  )}
-                />
-              </div>
-            </form>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
+              )}
+            />
+          </div>
+        </form>
+      </CardContent>
+    </Card>
   );
 };
 

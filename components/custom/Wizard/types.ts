@@ -3,6 +3,7 @@ export interface WizardProps<T, S extends string> {
   initialData?: Partial<T>;
   onStepChange?: (stepId: S, data: Partial<T>, stepIndex: number) => void;
   trackSteps?: boolean;
+  sharedHeader?: (stepIndex: number, stepCount: number) => React.ReactNode;
 }
 
 export interface WizardStepProps<T, S extends string> {
