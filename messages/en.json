@@ -1,5 +1,63 @@
 {
   "HomePage": {
     "title": "Hello world!"
+  },
+  "RegisterPage": {
+    "CreatePasswordForm": {
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "passwordRequired": "Password is required",
+      "passwordMinLength": "Password must be at least 8 characters",
+      "passwordInvalid": "Password must contain at least one uppercase letter, one lowercase letter, and one number",
+      "confirmPasswordLabel": "Confirm Password",
+      "confirmPasswordPlaceholder": "Confirm your password",
+      "confirmPasswordRequired": "Please confirm your password",
+      "passwordsDoNotMatch": "Passwords do not match",
+      "title": "Create a secure password",
+      "description": "Your password should be at least 8 characters long and include uppercase, lowercase, and numbers.",
+      "backButton": "Back",
+      "processingButton": "Processing...",
+      "continueButton": "Continue"
+    },
+    "PhoneOTPVerification": {
+      "otpLabel": "Verification Code",
+      "otpPlaceholder": "Enter 6-digit code",
+      "otpRequired": "Verification code is required",
+      "otpInvalid": "Please enter a valid 6-digit code",
+      "resendSuccess": "Verification code sent to {phoneNumber}",
+      "title": "Verify your phone number",
+      "description": "We\'ve sent a 6-digit verification code to",
+      "didNotReceiveCode": "Didn\'t receive the code?",
+      "resendButton": "Resend verification code",
+      "backButton": "Back",
+      "verifyingButton": "Verifying...",
+      "completeButton": "Complete Registration",
+      "termsAgreement": "By completing registration, you agree to our",
+      "termsOfService": "Terms of Service",
+      "and": "and",
+      "privacyPolicy": "Privacy Policy",
+      "registrationSuccess": "Registration completed successfully!"
+    },
+    "RegistrationForm": {
+      "firstNameLabel": "First Name",
+      "firstNamePlaceholder": "Enter your first name",
+      "firstNameRequired": "First name is required",
+      "firstNameMinLength": "First name must be at least 2 characters",
+      "lastNameLabel": "Last Name",
+      "lastNamePlaceholder": "Enter your last name",
+      "lastNameRequired": "Last name is required",
+      "lastNameMinLength": "Last name must be at least 2 characters",
+      "emailLabel": "Email Address",
+      "emailPlaceholder": "Enter your email",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Please enter a valid email address",
+      "phoneLabel": "Phone Number",
+      "phonePlaceholder": "Enter your phone number",
+      "phoneRequired": "Phone number is required",
+      "phoneInvalid": "Please enter a valid phone number",
+      "title": "Create your account",
+      "processingButton": "Processing...",
+      "continueButton": "Continue"
+    }
   }
 }
