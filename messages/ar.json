@@ -1,5 +1,63 @@
 {
   "HomePage": {
     "title": "مرحبا بالعالم!"
+  },
+  "RegisterPage": {
+    "CreatePasswordForm": {
+      "passwordLabel": "كلمة المرور",
+      "passwordPlaceholder": "أدخل كلمة المرور الخاصة بك",
+      "passwordRequired": "كلمة المرور مطلوبة",
+      "passwordMinLength": "يجب أن لا تقل كلمة المرور عن 8 أحرف",
+      "passwordInvalid": "يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل، وحرف صغير واحد، ورقم واحد",
+      "confirmPasswordLabel": "تأكيد كلمة المرور",
+      "confirmPasswordPlaceholder": "تأكيد كلمة المرور الخاصة بك",
+      "confirmPasswordRequired": "يرجى تأكيد كلمة المرور الخاصة بك",
+      "passwordsDoNotMatch": "كلمات المرور غير متطابقة",
+      "title": "أنشئ كلمة مرور آمنة",
+      "description": "يجب أن تكون كلمة مرورك مكونة من 8 أحرف على الأقل وتتضمن أحرفًا كبيرة وصغيرة وأرقامًا.",
+      "backButton": "رجوع",
+      "processingButton": "جاري المعالجة...",
+      "continueButton": "متابعة"
+    },
+    "PhoneOTPVerification": {
+      "otpLabel": "رمز التحقق",
+      "otpPlaceholder": "أدخل الرمز المكون من 6 أرقام",
+      "otpRequired": "رمز التحقق مطلوب",
+      "otpInvalid": "الرجاء إدخال رمز صالح مكون من 6 أرقام",
+      "resendSuccess": "تم إرسال رمز التحقق إلى {phoneNumber}",
+      "title": "تحقق من رقم هاتفك",
+      "description": "لقد أرسلنا رمز تحقق مكون من 6 أرقام إلى",
+      "didNotReceiveCode": "لم تستلم الرمز؟",
+      "resendButton": "إعادة إرسال رمز التحقق",
+      "backButton": "رجوع",
+      "verifyingButton": "جاري التحقق...",
+      "completeButton": "إكمال التسجيل",
+      "termsAgreement": "بإكمالك التسجيل، فإنك توافق على",
+      "termsOfService": "شروط الخدمة",
+      "and": "و",
+      "privacyPolicy": "سياسة الخصوصية",
+      "registrationSuccess": "تم التسجيل بنجاح!"
+    },
+    "RegistrationForm": {
+      "firstNameLabel": "الاسم الأول",
+      "firstNamePlaceholder": "أدخل اسمك الأول",
+      "firstNameRequired": "الاسم الأول مطلوب",
+      "firstNameMinLength": "يجب أن يتكون الاسم الأول من حرفين على الأقل",
+      "lastNameLabel": "اسم العائلة",
+      "lastNamePlaceholder": "أدخل اسم العائلة",
+      "lastNameRequired": "اسم العائلة مطلوب",
+      "lastNameMinLength": "يجب أن يتكون اسم العائلة من حرفين على الأقل",
+      "emailLabel": "عنوان البريد الإلكتروني",
+      "emailPlaceholder": "أدخل بريدك الإلكتروني",
+      "emailRequired": "البريد الإلكتروني مطلوب",
+      "emailInvalid": "الرجاء إدخال عنوان بريد إلكتروني صالح",
+      "phoneLabel": "رقم الهاتف",
+      "phonePlaceholder": "أدخل رقم هاتفك",
+      "phoneRequired": "رقم الهاتف مطلوب",
+      "phoneInvalid": "الرجاء إدخال رقم هاتف صالح",
+      "title": "أنشئ حسابك",
+      "processingButton": "جاري المعالجة...",
+      "continueButton": "متابعة"
+    }
   }
 }
